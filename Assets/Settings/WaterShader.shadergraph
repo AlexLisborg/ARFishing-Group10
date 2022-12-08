@@ -195,7 +195,7 @@
             },
             "m_InputSlot": {
                 "m_Node": {
-                    "m_Id": "57288181c13b4aa79c845ccc74e0b2a1"
+                    "m_Id": "42c81a1501564816882ce2b9ea53fbb8"
                 },
                 "m_SlotId": 0
             }
@@ -210,20 +210,6 @@
             "m_InputSlot": {
                 "m_Node": {
                     "m_Id": "142229f54adb44d5b260d8a00621a8a6"
-                },
-                "m_SlotId": 0
-            }
-        },
-        {
-            "m_OutputSlot": {
-                "m_Node": {
-                    "m_Id": "6c4ee76d3a444dd1ae3dc92b43898f67"
-                },
-                "m_SlotId": 2
-            },
-            "m_InputSlot": {
-                "m_Node": {
-                    "m_Id": "38eca4f813ba4b3db485ef02ba64dc7e"
                 },
                 "m_SlotId": 0
             }
@@ -455,8 +441,8 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": 249.99998474121095,
-            "y": -52.0000114440918
+            "x": 0.00001239776611328125,
+            "y": -22.000019073486329
         },
         "m_Blocks": [
             {
@@ -1453,7 +1439,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Alpha",
     "m_StageCapability": 2,
-    "m_Value": 0.5,
+    "m_Value": 0.30000001192092898,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }

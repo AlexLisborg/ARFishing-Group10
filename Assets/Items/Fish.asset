@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   name: Fish
-  value: 0
+  value: 10
   icon: {fileID: 21300000, guid: c64d3a9142def8748b182328dbe1488b, type: 3}
+  inventorySpot: 2

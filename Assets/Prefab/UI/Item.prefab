@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 105992816522133661}
   - component: {fileID: 637886021924691771}
   - component: {fileID: 6179129364775587878}
+  - component: {fileID: 2459373802697460514}
   m_Layer: 5
   m_Name: Item
   m_TagString: Untagged
@@ -198,7 +199,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 637886021924691771}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2459373802697460514}
+        m_TargetAssemblyTypeName: ItemOnClick, Assembly-CSharp
+        m_MethodName: sellThisItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2459373802697460514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2322249628262827033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a1724f3f9f36ee4db9c15ce89953428, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventorySpot: 0
 --- !u!1 &7056810034085618583
 GameObject:
   m_ObjectHideFlags: 0

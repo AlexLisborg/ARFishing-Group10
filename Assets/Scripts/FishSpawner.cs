@@ -10,11 +10,16 @@ public class FishSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Instantiate(fishPrefab, transform.position, Quaternion.identity);
+        
     }
 
     public void spawn()
     {
         Instantiate(fishPrefab,transform.position,Quaternion.identity);
+    }
+
+    public void kill()
+    {
+        Destroy(fishPrefab);
     }
 }

@@ -13,7 +13,7 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     public List<Item> items = new List<Item>();
     public int[] baits = new int[4];
-    public Bait activeBait = default;
+    public Bait activeBait;
 
     public TextMeshProUGUI moneyCounter;
     public Transform itemContent;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cacd95a20948ce842abe5fed98f2e485, type: 3}
   m_Name: MasterBait
   m_EditorClassIdentifier: 
+  id: 3
   name: Master Bait
   price: 500
   quality: 100

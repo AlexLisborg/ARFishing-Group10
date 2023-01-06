@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cacd95a20948ce842abe5fed98f2e485, type: 3}
   m_Name: DeepBait
   m_EditorClassIdentifier: 
+  id: 1
   name: Deep Bait
   price: 20
   quality: 2

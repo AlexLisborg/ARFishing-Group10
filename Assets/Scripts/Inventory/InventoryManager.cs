@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,6 +12,8 @@ public class InventoryManager : MonoBehaviour
     public int money;
     public static InventoryManager Instance;
     public List<Item> items = new List<Item>();
+    public int[] baits = new int[4];
+    public Bait activeBait = default;
 
     public TextMeshProUGUI moneyCounter;
     public Transform itemContent;
@@ -19,21 +22,14 @@ public class InventoryManager : MonoBehaviour
 
     private void Awake()
     {
+        baits[0] = 0;
+        baits[1] = 0;
+        baits[2] = 0;
+        baits[3] = 0;
         money = 0;
         Instance = this;
     }
 
-    public Item getItem(int invSpot)
-    {
-        foreach (Item item in items)
-        {
-            if (item.inventorySpot == invSpot)
-            {
-                return item;
-            }
-        }
-        return null;
-    }
 
     public void addItem(Item item)
     {
@@ -92,5 +88,58 @@ public class InventoryManager : MonoBehaviour
                 item.GetComponent<Button>().interactable = false;
             }
          }
+    }
+
+    public void buyBait(int baitId)
+    {
+        
+        switch (baitId)
+        {
+            case 0:
+                if (money >= 10)
+                {
+                    money -= 10;
+                    baits[baitId] += 1;
+                }
+                break;
+            case 1:
+                if (money >= 20)
+                {
+                    money -= 20;
+                    baits[baitId] += 1;
+                }
+                break;
+            case 2:
+                if (money >= 50)
+                {
+                    money -= 50;
+                    baits[baitId] += 1;
+                }
+                break;
+            case 3:
+                if (money >= 500)
+                {
+                    money -= 500;
+                    baits[baitId] += 1;
+                }
+                break;
+        }
+        moneyCounter.text = money.ToString();
+        updateBaitCounters();
+    }
+
+    public void setActiveBait(Bait bait)
+    {
+        activeBait = bait;
+    }
+
+    public void updateBaitCounters()
+    {
+        GameObject[] counters = GameObject.FindGameObjectsWithTag("BaitCounter");
+        foreach (GameObject obj in counters)
+        {
+            TextMeshProUGUI counter = obj.GetComponent<TextMeshProUGUI>();
+            counter.text = baits[Array.IndexOf(counters, obj)].ToString();
+        }
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
+    [SerializeField] Transform hookTransform;
+    public Vector3 fishMoveTowardsPosition = new Vector3(0,0,0);
     protected float minSpeed = 0.005f;
     protected float maxSpeed = 0.01f;
     protected bool getNewPos = true;
@@ -17,8 +19,10 @@ public class FishScript : MonoBehaviour
     public GameObject fishSpawner;
     private float acceleration = 0.008f;
     private float speed = 0.02f;
+    private Rigidbody rb;
     bool fly;
     bool swimming;
+    float n = 1;
 
     public AnimationCurve curve;
     public Vector3 pos;
@@ -29,8 +33,8 @@ public class FishScript : MonoBehaviour
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         start = transform.position;
-        fishSpawner = GameObject.Find("/FishSpawner");
         fly = false;
         swimming = true;
     }
@@ -44,22 +48,34 @@ public class FishScript : MonoBehaviour
     {
         if (swimming)
         {
+
             if (getNewPos)
             {
                 var newX = Random.Range(-1.4f, 2.5f);
                 var newZ = Random.Range(-3.0f, 1.6f);
                 var newY = Random.Range(-2.5f, 0.2f);
+                n = 1;
+                
                 if (IsValidNewPosition(newX, newZ))
                 {
                     curSpeed = Random.Range(minSpeed, maxSpeed);
                     targetPos = new Vector3(newX, newY, newZ);
+                    fishMoveTowardsPosition = targetPos;
                     getNewPos = false;
+                    
+                    Debug.Log("Getting new pos : " + newX + " , " + newZ + " , " + newY);
                 }
             }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, curSpeed);
-                if (Vector3.Distance(transform.position, targetPos) < 0.01f)
+                if (n <= 30)
+                {
+                    n = n + 0.01f;
+                }
+                
+                transform.LookAt(targetPos);
+                rb.velocity = (Vector3.Scale(Vector3.Normalize(new Vector3((hookTransform.position.x - transform.position.x), ((hookTransform.position.y - 0.3f) - transform.position.y), (hookTransform.position.z - transform.position.z))), new Vector3(2,2,2)) + Vector3.Normalize(new Vector3(targetPos.x - transform.position.x, targetPos.y - transform.position.y, targetPos.z - transform.position.z)) * 1);
+                if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPos.x, 0 , targetPos.z)) < 0.1f)
                 {
                     getNewPos = true;
                     start = transform.position;

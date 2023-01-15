@@ -21,7 +21,6 @@ public class LineController : MonoBehaviour
         ln.positionCount = pointCount;
         active = false;
         caught = false;
-        BeginDrawCircleSequence();
 
     }
 
@@ -65,5 +64,12 @@ public class LineController : MonoBehaviour
     public void ExitDrawCircleSequence()
     {
         ln.positionCount = 0; active = false;
+    }
+
+    public float GetRadius(){return radiusMultiplier;}
+    public Vector3 GetCenterPos() { return transform.position; }
+    public bool IsCaught()
+    {
+        return caught;
     }
 }

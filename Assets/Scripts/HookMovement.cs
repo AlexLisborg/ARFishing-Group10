@@ -10,69 +10,74 @@ public class HookMovement : MonoBehaviour
     private Vector3 screenpos;
     private Vector3 worldpos;
     private Transform fishTransform;
-    private FishScript fishScript;
+    private FishStateManager fishScript;
     private Camera cam;
     private Rigidbody rb;
     private float i = 0.5f;
+    bool hooked;
+    bool caught;
 
     [SerializeField] private GameObject fish;
     [SerializeField] private LayerMask hitlayer;
     [SerializeField] private float speed;
-    
-    State state;
     // Start is called before the first frame update
     void Start()
     {
         // Fixa så att hooken är en del av fishprefab ?
         rb = GetComponent<Rigidbody>();
-        fishScript = fish.GetComponent<FishScript>();
+        fishScript = fish.GetComponent<FishStateManager>();
         fishTransform = fish.transform;
         cam = Camera.current;
-        state = new Default();
+        hooked = false;
+        caught = false;
     }
     private void Update()
     {
-        if (i <= 5) { i = i + Time.deltaTime * 0.3f; }
-        Debug.Log(i);
-
-        
-        Vector3 vTowardsFish = Vector3.Normalize( fishScript.fishMoveTowardsPosition - transform.position);
-        //fishRb.velocity = new Vector3(transform.position.x - fishTransform.position.x, transform.position.y - fishTransform.position.y, transform.position.z - fishTransform.position.z);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hitData, 100, hitlayer))
-        {
-            Vector3 ab = (-1 * transform.position) + hitData.point;
-            Vector3 n = new Vector3(speed, speed, speed);
-            Vector3 result = new Vector3(ab.x * speed + vTowardsFish.x * i, ab.y, ab.z * speed + vTowardsFish.z * i);
-            rb.velocity = result;
-        }
-
-    }
-    private interface State
-    {
-        void Update();
-    }
-
-    private class Off 
-    {
-    }
-    private class Default : HookMovement, State
-    {
-        // Update is called once per frame
-        void HookMovement.State.Update()
+        if (caught)
         {
             
-
         }
-    }
+        else if (!hooked)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitData, 100, hitlayer))
+            {
+                Vector3 hookToRay = ((hitData.point - transform.position) * speed);
+                Vector3 targetPos = fishScript.GetTargetPos();
+                Vector3 hookToTargetPos = new Vector3(targetPos.x - transform.position.x, 0, targetPos.z - transform.position.z);
+                rb.velocity = hookToRay;
+            }
+        } else
+        {
+            if (i <= 10) { i = i + Time.deltaTime * UnityEngine.Random.Range(0.8f,1.5f); }
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hitData, 100, hitlayer))
+            {
+                Vector3 hookToRay = (hitData.point - transform.position) * speed * Vector3.Distance(hitData.point,transform.position);
+                Vector3 targetPos = fishScript.GetTargetPos();
+                Vector3 hookToTargetPos = new Vector3(targetPos.x - transform.position.x, 0, targetPos.z - transform.position.z);
+                rb.velocity = hookToRay + hookToTargetPos * i;
+            }
+        }
+        
 
-    private class HookedfishDefault
+    }
+    public void hook()
     {
-
+        hooked = true;
     }
-    
 
-    
-
-    
+    public void unHook()
+    {
+        hooked = false;
+    }
+    public void fishCaught()
+    {
+        caught = true;
+        gameObject.SetActive(false);
+    }
+    public void reseti()
+    {
+        i = 0.5f;
+    }
 }

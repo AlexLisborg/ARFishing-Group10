@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 668794356818267949}
   - component: {fileID: 668794356818267946}
   - component: {fileID: 668794356818267947}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -111,11 +111,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5441911319609865415}
-  - component: {fileID: 2253536858876774782}
   - component: {fileID: 7226872704592918592}
   - component: {fileID: 8042388610479390911}
   - component: {fileID: 2908193427354246101}
-  m_Layer: 0
+  - component: {fileID: 3995023031294909119}
+  m_Layer: 8
   m_Name: FishRotationFix
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,46 +138,6 @@ Transform:
   m_Father: {fileID: 6810186893100817438}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2253536858876774782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2342262400694545129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a5087ed6ea5e1a4e9f691519b3b26d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hookTransform: {fileID: 5714196439001803883}
-  fishMoveTowardsPosition: {x: 0, y: 0, z: 0}
-  fishSpawner: {fileID: 6810186893378394049}
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.9466447
-      value: 0.40375918
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  pos: {x: 0, y: 0, z: 0}
 --- !u!65 &7226872704592918592
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -186,7 +146,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2342262400694545129}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.11, y: 0.23, z: 0.64}
@@ -224,7 +184,46 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &3995023031294909119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2342262400694545129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0caa83f00bd2744cb731580683a3f7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HookStateManager: {fileID: 7124304411415813733}
+  HookTransform: {fileID: 5714196439001803883}
+  LineController: {fileID: 6810186892226920777}
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9958191
+      value: 0.41509247
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2829471474672768728
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,7 +237,7 @@ GameObject:
   - component: {fileID: 226167303172707404}
   - component: {fileID: 7178411184823376732}
   - component: {fileID: 6810186892550561027}
-  - component: {fileID: 746470232393748292}
+  - component: {fileID: 7124304411415813733}
   m_Layer: 7
   m_Name: hook
   m_TagString: Untagged
@@ -342,8 +341,8 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 4
-  m_CollisionDetection: 0
---- !u!114 &746470232393748292
+  m_CollisionDetection: 2
+--- !u!114 &7124304411415813733
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -352,14 +351,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2829471474672768728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65d3616e24602574da45be0e4e07da55, type: 3}
+  m_Script: {fileID: 11500000, guid: 65c98976dc2be6748b0a8115fbb8c18b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fish: {fileID: 2342262400694545129}
-  hitlayer:
+  FishStateManager: {fileID: 3995023031294909119}
+  HitLayer:
     serializedVersion: 2
     m_Bits: 16
-  speed: 2
 --- !u!1 &3498485222903827883
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,8 +492,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5087ed6ea5e1a4e9f691519b3b26d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hookTransform: {fileID: 0}
-  fishMoveTowardsPosition: {x: 0, y: 0, z: 0}
+  hookObject: {fileID: 0}
+  hookMovement: {fileID: 0}
+  lineController: {fileID: 0}
   fishSpawner: {fileID: 6810186893378394049}
   curve:
     serializedVersion: 2
@@ -658,8 +657,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5716242088370277361}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.9336e-11, y: -2.34, z: 0}
-  m_LocalScale: {x: 1.143561, y: 1.6296694, z: 1.143561}
+  m_LocalPosition: {x: 3.9336e-11, y: -4.73, z: 0}
+  m_LocalScale: {x: 1.143561, y: 5.818409, z: 1.143561}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5714196439001803883}
@@ -723,8 +722,8 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5716242088370277361}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
+  m_IsTrigger: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0.0000009536743, y: -0.0000009536743, z: 0}
@@ -1365,6 +1364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishPrefab: {fileID: 3894011196810869073, guid: 8ec2ff392dca2224d9e6e5594422f4d7,
     type: 3}
+  fishList:
+  - {fileID: 3894011196810869073, guid: 8ec2ff392dca2224d9e6e5594422f4d7, type: 3}
+  - {fileID: 3894011196810869073, guid: 8ec2ff392dca2224d9e6e5594422f4d7, type: 3}
 --- !u!1 &6810186893442175278
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,8 +6,10 @@ using UnityEngine;
 
 public class FishScript : MonoBehaviour
 {
-    [SerializeField] Transform hookTransform;
-    public Vector3 fishMoveTowardsPosition = new Vector3(0,0,0);
+    [SerializeField] GameObject hookObject;
+    [SerializeField] HookMovement hookMovement;
+    [SerializeField] LineController lineController;
+    protected Transform hookTransform;
     protected float minSpeed = 0.005f;
     protected float maxSpeed = 0.01f;
     protected bool getNewPos = true;
@@ -22,7 +24,7 @@ public class FishScript : MonoBehaviour
     private Rigidbody rb;
     bool fly;
     bool swimming;
-    float n = 1;
+    bool hooked;
 
     public AnimationCurve curve;
     public Vector3 pos;
@@ -34,15 +36,19 @@ public class FishScript : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        hookTransform = hookObject.GetComponent<Transform>();
         start = transform.position;
         fly = false;
         swimming = true;
+        hooked = false;
     }
 
     void Update()
     {
         Move();
     }
+
+    
 
     public virtual void Move()
     {
@@ -54,35 +60,47 @@ public class FishScript : MonoBehaviour
                 var newX = Random.Range(-1.4f, 2.5f);
                 var newZ = Random.Range(-3.0f, 1.6f);
                 var newY = Random.Range(-2.5f, 0.2f);
-                n = 1;
                 
                 if (IsValidNewPosition(newX, newZ))
                 {
                     curSpeed = Random.Range(minSpeed, maxSpeed);
                     targetPos = new Vector3(newX, newY, newZ);
-                    fishMoveTowardsPosition = targetPos;
                     getNewPos = false;
-                    
                     Debug.Log("Getting new pos : " + newX + " , " + newZ + " , " + newY);
+                    hookMovement.reseti();
                 }
             }
+
             else
             {
-                if (n <= 30)
+                if(hooked)
                 {
-                    n = n + 0.01f;
+                    transform.LookAt(targetPos);
+                    Vector3 fishToHook = Vector3.Normalize((hookTransform.position - new Vector3(0, 1f, 0)) - transform.position);
+                    Vector3 fishToTargetPos = Vector3.Normalize(targetPos - transform.position);
+
+                    rb.velocity = fishToHook * 3 + fishToTargetPos;
+                    if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPos.x, 0, targetPos.z)) < 0.5f)
+                    {
+                        getNewPos = true;
+                        start = transform.position;
+                    }
+                }
+                else
+                {
+                    transform.LookAt(targetPos);
+                    Vector3 fishToTargetPos = Vector3.Normalize(targetPos - transform.position);
+                    rb.velocity = fishToTargetPos;
+                    if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPos.x, 0, targetPos.z)) < 0.1f)
+                    {
+                        getNewPos = true;
+                        start = transform.position;
+                    }
                 }
                 
-                transform.LookAt(targetPos);
-                rb.velocity = (Vector3.Scale(Vector3.Normalize(new Vector3((hookTransform.position.x - transform.position.x), ((hookTransform.position.y - 0.3f) - transform.position.y), (hookTransform.position.z - transform.position.z))), new Vector3(2,2,2)) + Vector3.Normalize(new Vector3(targetPos.x - transform.position.x, targetPos.y - transform.position.y, targetPos.z - transform.position.z)) * 1);
-                if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(targetPos.x, 0 , targetPos.z)) < 0.1f)
-                {
-                    getNewPos = true;
-                    start = transform.position;
-                }
             }
         }
-        else if (fly)
+        else if (lineController.IsCaught())
         {
             time += Time.deltaTime;
             speed += acceleration;
@@ -138,9 +156,28 @@ public class FishScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!hooked)
+        {
+            hooked = true;
+            hookMovement.hook();
+            lineController.BeginDrawCircleSequence();
+        }
+    }
+
+    private void catchFish()
+    {
+        hookMovement.unHook();
         swimming = false;
         fly = true;
         start = transform.position;
         //fishSpawner.GetComponent<FishSpawner>().spawn();
     }
+
+
+    public Vector3 getTargetPos()
+    {
+        return targetPos;
+    }
+
+
 }

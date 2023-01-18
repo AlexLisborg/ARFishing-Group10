@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 8896451679111818922}
   - component: {fileID: 175915247054638400}
   - component: {fileID: 8980383649170017305}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: NoBait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -586,7 +586,7 @@ GameObject:
   - component: {fileID: 229574367223944337}
   - component: {fileID: 5881124097623466739}
   - component: {fileID: 8170423929913733223}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DeepBait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -683,13 +683,13 @@ GameObject:
   - component: {fileID: 8964494986735237647}
   - component: {fileID: 5665535383796586932}
   - component: {fileID: 3646858797183202974}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DefaultBait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7993124564149764506
 Transform:
   m_ObjectHideFlags: 0
@@ -780,7 +780,7 @@ GameObject:
   - component: {fileID: 6342734585022033158}
   - component: {fileID: 6070787481577504472}
   - component: {fileID: 2700446732015295178}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MasterBait
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2004,6 +2004,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 5441911319609865415}
     m_Modifications:
+    - target: {fileID: 9189313089132684203, guid: 8ec2ff392dca2224d9e6e5594422f4d7,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9189313089132684244, guid: 8ec2ff392dca2224d9e6e5594422f4d7,
         type: 3}
       propertyPath: m_RootOrder

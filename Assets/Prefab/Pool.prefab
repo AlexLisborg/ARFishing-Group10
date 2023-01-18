@@ -468,7 +468,7 @@ MonoBehaviour:
   Text: {fileID: 5306335038058609278}
   HitLayer:
     serializedVersion: 2
-    m_Bits: 528
+    m_Bits: 512
 --- !u!1 &5306335036871309793
 GameObject:
   m_ObjectHideFlags: 0
@@ -3052,7 +3052,7 @@ GameObject:
   - component: {fileID: 5306335038058609274}
   - component: {fileID: 5306335038058609275}
   - component: {fileID: 5306335038058609272}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Text "Tap To Start"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3278,7 +3278,7 @@ GameObject:
   - component: {fileID: 5306335038104057242}
   - component: {fileID: 5306335038104057243}
   - component: {fileID: 5306335038104057240}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

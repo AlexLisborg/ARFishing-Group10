@@ -25,14 +25,23 @@ public class PufferfishFreeState : FishBaseState
 
     public override void UpdateState(FishStateManager fish)
     {
+        
         if (_isAngry){_timer += Time.deltaTime;}
         if (_timer >= 10) { fish.DeflatePufferfish(); }
 
-        fish.GetNewTargetPosOnCondition();
-        Vector3 targetPos = fish.GetTargetPos();
-        fish.transform.LookAt(targetPos);
-        Vector3 fishToTargetPos = Vector3.Normalize(targetPos - fish.transform.position);
-        fish.SetVelocity(fishToTargetPos);
+         if (_timer >= 30)
+        {
+            fish.SwitchState(fish.Hooked);
+        } else
+        {
+            
+            fish.GetNewTargetPosOnCondition();
+
+            Vector3 targetPos = fish.GetTargetPos();
+            fish.transform.LookAt(targetPos);
+            Vector3 fishToTargetPos = Vector3.Normalize(targetPos - fish.transform.position);
+            fish.SetVelocity(fishToTargetPos);
+        }
 
     }
 }

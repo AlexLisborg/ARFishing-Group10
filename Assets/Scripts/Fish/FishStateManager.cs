@@ -51,6 +51,7 @@ public class FishStateManager : MonoBehaviour
     private PufferfishScript _pufferfishScript;
     private InventoryManager _inventoryManager;
     private CatchFishInitializer _catchFishInitializer;
+    private Vector3 _middleOfPool;
     
 
     [System.Obsolete]
@@ -126,6 +127,8 @@ public class FishStateManager : MonoBehaviour
             _currentFish = 1;
         }
         _catchFishInitializer = GameObject.Find("CatchFishInitializer").GetComponent<CatchFishInitializer>();
+        _middleOfPool = GameObject.Find("CatchFishInitializer").transform.position;
+        _targetPos = _middleOfPool;
     }
     float timer = 0;
 
@@ -148,33 +151,6 @@ public class FishStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
-    public bool IsValidNewPosition(float newX, float newZ)
-    {
-        var xPos = transform.position.x;
-        var zPos = transform.position.z;
-
-        if (xPos < 0 && newX > 0 && (FloatAbs(xPos) + newX > 0.5f) && (FloatAbs(zPos) + newZ > _rangeDiff))
-        {
-            return true;
-        }
-        else if (xPos > 0 && newX < 0 && (FloatAbs(newX) + xPos > 0.5f) && (FloatAbs(newZ) + zPos > _rangeDiff))
-        {
-            return true;
-        }
-        else
-        {
-            if (xPos < newX && FloatAbs(xPos) - FloatAbs(newX) > 0.5 && FloatAbs(zPos) - FloatAbs(newZ) > _rangeDiff)
-            {
-                return true;
-            }
-            else if (xPos > newX && FloatAbs(newX) - FloatAbs(xPos) > 0.5 && FloatAbs(newZ) - FloatAbs(zPos) > _rangeDiff)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     float FloatAbs(float f)
     {
         if (f < 0)
@@ -186,17 +162,14 @@ public class FishStateManager : MonoBehaviour
 
     public void CalculateNewTargetPos()
     {
-        var newX = Random.Range(-1.4f, 2.5f);
-        var newZ = Random.Range(-3.0f, 1.6f);
-        var newY = Random.Range(-2.5f, 0.2f);
+        var newX = Random.Range(_middleOfPool.x - 1.4f, _middleOfPool.x + 2.5f);
+        var newZ = Random.Range(_middleOfPool.z - 3.0f, _middleOfPool.z +1.6f);
+        var newY = Random.Range(_middleOfPool.y - 2.5f, _middleOfPool.y + 0.2f);
+        _curSpeed = Random.Range(_minSpeed, _maxSpeed);
+        _targetPos = new Vector3(newX, newY, newZ);
+        Debug.Log("Getting new pos : " + newX + " , " + newZ + " , " + newY);
+        HookStateManager.ResetI();
 
-        if (IsValidNewPosition(newX, newZ))
-        {
-            _curSpeed = Random.Range(_minSpeed, _maxSpeed);
-            _targetPos = new Vector3(newX, newY, newZ);
-            Debug.Log("Getting new pos : " + newX + " , " + newZ + " , " + newY);
-            HookStateManager.ResetI();
-        }
     }
 
     public Vector3 GetTargetPos() { return _targetPos; }
@@ -221,6 +194,7 @@ public class FishStateManager : MonoBehaviour
 
     public void GetNewTargetPosOnCondition()
     {
+        Debug.Log(_targetPos);
         if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(_targetPos.x, 0, _targetPos.z)) < 0.5f) 
         { 
             CalculateNewTargetPos();

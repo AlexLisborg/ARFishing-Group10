@@ -6,17 +6,19 @@ public class DragtoMove : MonoBehaviour
 {
     private Touch Touch;
     private float speedModifier;
+    private GameObject ob;
 
     
     void Start()
     {
-        speedModifier = 0.001f;   
+        ob = GameObject.Find("CatchFishObjects");
+        speedModifier = 0.006f;   
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0) 
+        if (Input.touchCount > 0 && ob == null) 
         {
             Touch = Input.GetTouch(0);
 

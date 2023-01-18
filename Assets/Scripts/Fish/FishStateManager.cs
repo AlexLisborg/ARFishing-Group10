@@ -46,13 +46,18 @@ public class FishStateManager : MonoBehaviour
     private bool _useActiveBait;
     private Bait _activeBait;
     private int _currentFish;
+    float _timer = 0;
 
     private Rigidbody _rigidBody;
     private PufferfishScript _pufferfishScript;
     private InventoryManager _inventoryManager;
     private CatchFishInitializer _catchFishInitializer;
     private Vector3 _middleOfPool;
-    
+
+    //Audio
+    public AudioSource caughtAudio;
+    public AudioSource atSurfaceAudio;
+
 
     [System.Obsolete]
     void Awake()
@@ -130,12 +135,20 @@ public class FishStateManager : MonoBehaviour
         _middleOfPool = GameObject.Find("CatchFishInitializer").transform.position;
         _targetPos = _middleOfPool;
     }
-    float timer = 0;
+    
 
+
+    
+
+    private void Start()
+    {
+        _timer = 0;
+    }
+
+   
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= 30) { timer = 0; }
+        _timer += Time.deltaTime;
         //Debug.Log(_state.ToString());
         _state.UpdateState(this);
         
@@ -151,15 +164,6 @@ public class FishStateManager : MonoBehaviour
         state.EnterState(this);
     }
 
-    float FloatAbs(float f)
-    {
-        if (f < 0)
-        {
-            return (-1 * f);
-        }
-        return f;
-    }
-
     public void CalculateNewTargetPos()
     {
         var newX = Random.Range(_middleOfPool.x - 1.4f, _middleOfPool.x + 2.5f);
@@ -173,25 +177,20 @@ public class FishStateManager : MonoBehaviour
     }
 
     public Vector3 GetTargetPos() { return _targetPos; }
+    public Vector3 GetMiddlePos() { return _middleOfPool;  }
     public void SetVelocity(Vector3 velocity) { _rigidBody.velocity = velocity; }
     public void SetStartToCurrentPosition() { _start = transform.position; }
     public void BeginDrawCircleSequence() { LineController.BeginDrawCircleSequence(); }
     public Transform GetHookTransform() { return HookTransform; }
     public bool IsCaught() { return LineController.IsCaught(); }
     public void SetHookToCaught() { HookStateManager.SwitchState(HookStateManager.Hooked); }
+    public void DestroyHook() { Destroy(HookStateManager.transform.gameObject);}
+   
     public bool IsOutsideRange() { Debug.Log(LineController.GetRadius()); return Vector3.Distance(transform.position, LineController.GetCenterPos()) > LineController.GetRadius() + 0.5f;  }
     
     public Bait GetActiveBait() { return _activeBait; }
-    public void UpdateFlying()
-    {
-        _time += Time.deltaTime;
-        _speed += _acceleration;
-        _targetPos = new Vector3(Camera.main.transform.position.x + 0.7f, Camera.main.transform.position.y - 0.4f, Camera.main.transform.position.z);
-        _pos = Vector3.Lerp(_start, _targetPos, _time * _speed);
-        _pos.y += Curve.Evaluate(_time);
-        transform.position = _pos;
-    }
 
+    public void ConsumeActiveBait() { _inventoryManager.baits[_activeBait.id] -= 1; }
     public void GetNewTargetPosOnCondition()
     {
         Debug.Log(_targetPos);
@@ -199,6 +198,15 @@ public class FishStateManager : MonoBehaviour
         { 
             CalculateNewTargetPos();
             SetStartToCurrentPosition();
+        }
+    }
+
+    public void FlyFishTowardCamera(Vector3 start)
+    {
+        SetVelocity(Vector3.Normalize(Camera.main.transform.position - start) * 8f);
+        if (Vector3.Distance(transform.position, Camera.main.transform.position) < 1.0f)
+        {
+            CatchFish();
         }
     }
 

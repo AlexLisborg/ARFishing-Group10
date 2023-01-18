@@ -27,12 +27,15 @@ public class FishHookedState : FishBaseState
         fish.SetVelocity(fishToHook * 3 + fishToTargetPos);
         if (fish.IsCaught())
         {
+            fish.ConsumeActiveBait();
+            fish.caughtAudio.Play();
+            fish.DestroyHook();
+            fish.SwitchState(fish.Flying);
             
-            fish.CatchFish();
         }
         if (fish.IsOutsideRange())
         {
-            Debug.Log("IS OUTSIDE RANGE");
+            fish.ConsumeActiveBait();
             fish.SelfDestruct();
         }
     }

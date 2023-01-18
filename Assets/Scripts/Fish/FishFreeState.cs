@@ -4,6 +4,7 @@ using UnityEngine;
 public class FishFreeState : FishBaseState
 {
     private float _timer;
+    private bool _waitSurfaceAudio;
     public override void EnterState(FishStateManager fish)
     {
         _timer = 0;
@@ -13,13 +14,13 @@ public class FishFreeState : FishBaseState
     {
         fish.SwitchState(fish.Hooked);
     }
-
     public override void UpdateState(FishStateManager fish)
     {
         if (_timer >= 30)
         {
             fish.SwitchState(fish.Hooked);
-        } else
+        }
+        else
         {
             _timer += Time.deltaTime;
             fish.GetNewTargetPosOnCondition();
@@ -29,6 +30,15 @@ public class FishFreeState : FishBaseState
             Vector3 fishToTargetPos = Vector3.Normalize(targetPos - fish.transform.position);
             fish.SetVelocity(fishToTargetPos);
         }
-        
+
+        if (fish.transform.position.y > fish.GetMiddlePos().y -0.2f && !_waitSurfaceAudio)
+        {
+            fish.atSurfaceAudio.Play();
+            _waitSurfaceAudio = true;
+        }
+        else if (fish.transform.position.y < fish.GetMiddlePos().y - 0.3f && _waitSurfaceAudio)
+        {
+            _waitSurfaceAudio = false;
+        }
     }
 }

@@ -40,9 +40,9 @@ public class LineController : MonoBehaviour
                 }
 
                 //Decreace radius bu shrinkspeed
-                radiusMultiplier = radiusMultiplier - shrinkSpeed;
+                radiusMultiplier = radiusMultiplier - shrinkSpeed * Time.deltaTime;
                 //If radius is at the limit ( 2 ), boolean caught is set to true
-                if (radiusMultiplier <= 2) { caught = true; }
+                if (radiusMultiplier <= 0.8f) { caught = true; }
 
             }
             else
@@ -70,6 +70,7 @@ public class LineController : MonoBehaviour
     public Vector3 GetCenterPos() { return transform.position; }
     public bool IsCaught()
     {
+        Debug.Log(caught);
         return caught;
     }
 }

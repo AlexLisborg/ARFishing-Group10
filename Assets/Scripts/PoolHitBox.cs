@@ -27,7 +27,7 @@ public class PoolHitBox : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            fish.spawn();
+            //fish.spawn();
             hook.spawn();
             camera1.SetActive(false);
             camera2.SetActive(true);
@@ -36,7 +36,7 @@ public class PoolHitBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        fish.spawn();
+        //fish.spawn();
         camera1.SetActive(false);
         camera2.SetActive(true);
         hook.spawn();

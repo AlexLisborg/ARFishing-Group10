@@ -3,39 +3,32 @@ using UnityEngine;
 
 public class FishFreeState : FishBaseState
 {
-    //Variables
-    private bool _getNewPos;
-
+    private float _timer;
     public override void EnterState(FishStateManager fish)
     {
-
+        _timer = 0;
     }
 
     public override void OnTriggerEnter(FishStateManager fish)
     {
-        fish.SwitchState(fish.hooked);
-        fish.SetHookToCaught();
+        fish.SwitchState(fish.Hooked);
     }
 
     public override void UpdateState(FishStateManager fish)
     {
-        if (_getNewPos)
+        if (_timer >= 30)
         {
-            fish.CalculateNewTargetPos();
-            _getNewPos= false;
-        }
+            fish.SwitchState(fish.Hooked);
+        } else
+        {
+            _timer += Time.deltaTime;
+            fish.GetNewTargetPosOnCondition();
 
-        else
-        {
             Vector3 targetPos = fish.GetTargetPos();
             fish.transform.LookAt(targetPos);
             Vector3 fishToTargetPos = Vector3.Normalize(targetPos - fish.transform.position);
             fish.SetVelocity(fishToTargetPos);
-            if (Vector3.Distance(new Vector3(fish.transform.position.x, 0, fish.transform.position.z), new Vector3(targetPos.x, 0, targetPos.z)) < 0.1f)
-            {
-                _getNewPos = true;
-                fish.SetStartToCurrentPosition();
-            }
         }
+        
     }
 }

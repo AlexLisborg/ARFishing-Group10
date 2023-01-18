@@ -5,15 +5,44 @@ using UnityEngine;
 public class CatchFishInitializer : MonoBehaviour
 {
 
-    [SerializeField] GameObject catchFishGameObjectsPrefab;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject CatchFishGameObjectsPrefab;
+    [SerializeField] GameObject Text;
+    [SerializeField] LayerMask HitLayer;
+
+    private bool _avaliable;
+    private InventoryManager _inventoryManager;
+
+    private void Start()
     {
-        catchFishInitialize(); 
+        MakeAvaliable();
+        _inventoryManager = InventoryManager.Instance;
+    }
+    private void Update()
+    {
+        if (_avaliable)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray2, out RaycastHit hitDataa, 100, HitLayer))
+                {
+                    CatchFishInitialize();
+
+                }
+            }
+        }
     }
 
-    public void catchFishInitialize()
+    public void CatchFishInitialize()
     {
-        GameObject.Instantiate(catchFishGameObjectsPrefab, transform.position, Quaternion.identity);
+        _avaliable = false;
+        GameObject.Instantiate(CatchFishGameObjectsPrefab, transform.position, Quaternion.identity);
+        Text.SetActive(false);
+    }
+
+    public void MakeAvaliable()
+    {
+        _avaliable = true;
+        Text.SetActive(true);
     }
 }

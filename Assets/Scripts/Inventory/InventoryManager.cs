@@ -5,10 +5,12 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+
 
 public class InventoryManager : MonoBehaviour
 {
+    public List<Bait> baitsObjects = new List<Bait>();
+
     public int money;
     public static InventoryManager Instance;
     public List<Item> items = new List<Item>();
@@ -27,6 +29,7 @@ public class InventoryManager : MonoBehaviour
         baits[2] = 0;
         baits[3] = 0;
         money = 0;
+        SelectDefaultBait();
         Instance = this;
     }
 
@@ -128,10 +131,12 @@ public class InventoryManager : MonoBehaviour
         updateBaitCounters();
     }
 
-    public void setActiveBait(Bait bait)
-    {
-        activeBait = bait;
-    }
+    public void setActiveBait(Bait bait) { activeBait = bait; }
+
+    public void SelectDefaultBait() { activeBait = baitsObjects[0]; Debug.Log(activeBait); }
+    public void SelectDeepBait() { activeBait = baitsObjects[1]; Debug.Log(activeBait); }
+    public void SelectStrongBait() { activeBait = baitsObjects[2]; Debug.Log(activeBait); }
+    public void SelectMasterBait() { activeBait = baitsObjects[3]; Debug.Log(activeBait); }
 
     public void updateBaitCounters()
     {

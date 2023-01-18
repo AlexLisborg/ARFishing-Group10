@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class HookStateManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class HookStateManager : MonoBehaviour
     public HookHookedState Hooked = new HookHookedState();
     public HookFreeState Free = new HookFreeState();
     public HookDefaultState Default = new HookDefaultState();
+    public HookFlyAwayFromFishState FlyAway = new HookFlyAwayFromFishState();
 
     private HookBaseState _state;
     private HookBaseState _previousState;
@@ -61,4 +63,9 @@ public class HookStateManager : MonoBehaviour
     public Vector3 GetDefaultPos() { return _defaultPos; }
     public void SwitchBackState() { SwitchState(_previousState); }
     public Camera GetCamera() { return _camera; }
+    public Transform GetFishTransform() { return FishStateManager.transform; }
+    public void PushAway()
+    {
+        SwitchState(FlyAway);
+    }
 }

@@ -17,6 +17,9 @@ public class AnchorCreator : MonoBehaviour
     // This is the prefab that will appear every time an anchor is created.
     [SerializeField]
     GameObject m_AnchorPrefab;
+    [SerializeField] GameObject ResetPoolButton;
+    private bool _isActive = true;
+    private GameObject go;
 
     public GameObject AnchorPrefab
     {
@@ -40,6 +43,7 @@ public class AnchorCreator : MonoBehaviour
     // The ARAnchorManager handles the processing of all anchors and updates their position and rotation.
     void Awake()
     {
+        ResetPoolButton.SetActive(false);
         m_RaycastManager = GetComponent<ARRaycastManager>();
         m_AnchorManager = GetComponent<ARAnchorManager>();
         m_PlaneManager = GetComponent<ARPlaneManager>();
@@ -48,6 +52,7 @@ public class AnchorCreator : MonoBehaviour
 
     void Update()
     {
+        if (!_isActive && !ResetPoolButton.active) { ResetPoolButton.SetActive(true); } else if (_isActive && ResetPoolButton.active) { ResetPoolButton.SetActive(false); }
         // If there is no tap, then simply do nothing until the next call to Update().
         if (Input.touchCount == 0)
             return;
@@ -69,7 +74,14 @@ public class AnchorCreator : MonoBehaviour
             // This prefab instance is parented to the anchor to make sure the position of the prefab is consistent
             // with the anchor, since an anchor attached to an ARPlane will be updated automatically by the ARAnchorManager as the ARPlane's exact position is refined.
             var anchor = m_AnchorManager.AttachAnchor(hitPlane, hitPose);
-            Instantiate(m_AnchorPrefab, anchor.transform);
+            if (_isActive)
+            {
+                go = Instantiate(m_AnchorPrefab, anchor.transform);
+                go.transform.SetParent(transform, true);
+                _isActive = false;
+                ResetPoolButton.SetActive(true);
+            }
+            
 
             if (anchor == null)
             {
@@ -81,6 +93,14 @@ public class AnchorCreator : MonoBehaviour
                 m_AnchorPoints.Add(anchor);
             }
         }
+    }
+
+    public void KillArElement()
+    {
+        Destroy(go);
+        Destroy(GameObject.FindGameObjectWithTag("DuringCatchSequence"));
+        _isActive = true;
+        ResetPoolButton.SetActive(false);
     }
 
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();

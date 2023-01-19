@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,9 +22,17 @@ public class InventoryManager : MonoBehaviour
     public Transform itemContent;
     public GameObject inventoryItem;
     public Toggle sell;
+    public List<Item> avaliableItems;
+
+    private string filePathInventory;
+    private string filePathMoney;
+    private string filePathBait;
 
     private void Awake()
     {
+        filePathInventory = Application.persistentDataPath + "/inventory.txt";
+        filePathBait = Application.persistentDataPath + "/money.txt";
+        filePathMoney = Application.persistentDataPath + "/bait.txt";
         baits[0] = 0;
         baits[1] = 0;
         baits[2] = 0;
@@ -133,10 +142,10 @@ public class InventoryManager : MonoBehaviour
 
     public void setActiveBait(Bait bait) { activeBait = bait; }
 
-    public void SelectDefaultBait() { activeBait = baitsObjects[0]; Debug.Log(activeBait); }
-    public void SelectDeepBait() { activeBait = baitsObjects[1]; Debug.Log(activeBait); }
-    public void SelectStrongBait() { activeBait = baitsObjects[2]; Debug.Log(activeBait); }
-    public void SelectMasterBait() { activeBait = baitsObjects[3]; Debug.Log(activeBait); }
+    public void SelectDefaultBait() { activeBait = baitsObjects[0]; }
+    public void SelectDeepBait() { activeBait = baitsObjects[1];  }
+    public void SelectStrongBait() { activeBait = baitsObjects[2]; }
+    public void SelectMasterBait() { activeBait = baitsObjects[3]; }
 
     public void updateBaitCounters()
     {
@@ -147,4 +156,39 @@ public class InventoryManager : MonoBehaviour
             counter.text = baits[Array.IndexOf(counters, obj)].ToString();
         }
     }
+    public void Save()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (Item item in items) 
+        {
+            sb.Append(item.id + System.Environment.NewLine);
+        }
+        System.IO.File.WriteAllText(filePathInventory,sb.ToString());
+        sb.Clear();
+        foreach (int i in baits)
+        {
+            sb.Append(i + System.Environment.NewLine);
+        }
+        System.IO.File.WriteAllText(filePathBait, sb.ToString());
+        System.IO.File.WriteAllText(filePathMoney, money.ToString());
+    }
+    public void Load()
+    {
+        string content = System.IO.File.ReadAllText(filePathInventory);
+        string[] listOfItems = content.Split(new char[] { '\r', '\n' });
+        foreach (string itemId in listOfItems)
+        {
+            addItem(avaliableItems[itemId.ToIntArray()[0]]);
+        }
+        string contentBaits = System.IO.File.ReadAllText(filePathBait);
+        string[] listOfBaits = contentBaits.Split(new char[] { '\r', '\n' });
+        for (int i = 0; i < listOfBaits.Length; i++)
+        {
+            baits[i] = listOfBaits[i].ToIntArray()[0];
+        }
+        money = System.IO.File.ReadAllText(filePathMoney).ToIntArray()[0];
+        updateBaitCounters();
+        
+    }
+    public void AddMoney(int amount) { money += amount; }
 }

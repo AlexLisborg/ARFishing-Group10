@@ -36,10 +36,6 @@ public class FishStateManager : MonoBehaviour
     private float _curSpeed;
     private float _minSpeed;
     private float _maxSpeed;
-    private float _rangeDiff = 1f;
-    private float _time;
-    private float _speed = 0.02f;
-    private float _acceleration = 0.008f;
     private Vector3 _targetPos;
     private Vector3 _start;
     private Vector3 _pos;
@@ -70,40 +66,31 @@ public class FishStateManager : MonoBehaviour
         // If you have enough of the active bait.
         if (_inventoryManager.baits[_inventoryManager.activeBait.id] > 0)
         {
-            Debug.Log("11");
             _useActiveBait = true;
             if (_activeBait.id == 0 || _activeBait.id == 2)
             {
-                Debug.Log("1.31");
                 DefaultHitBox.SetActive(true);
                 DeepHitBox.SetActive(false);
                 MasterHitBox.SetActive(false);
                 NoBaitHitBox.SetActive(false);
-                Debug.Log("1.32");
             }
             
             else if (_activeBait.id == 3)
             {
-                Debug.Log("1.21");
                 DefaultHitBox.SetActive(false);
                 DeepHitBox.SetActive(false);
                 MasterHitBox.SetActive(true);
                 NoBaitHitBox.SetActive(false);
-                Debug.Log("1.22");
             }
             else if (_activeBait.id == 1)
             {
-                Debug.Log("1.11");
                 DefaultHitBox.SetActive(false);
                 DeepHitBox.SetActive(true);
                 MasterHitBox.SetActive(false);
                 NoBaitHitBox.SetActive(false);
-                Debug.Log("1.12");
             }
-            Debug.Log("12");
         }
         else {
-            Debug.Log("Expected");
             _useActiveBait &= false;
             DefaultHitBox.SetActive(false);
             DeepHitBox.SetActive(false);
@@ -149,7 +136,6 @@ public class FishStateManager : MonoBehaviour
     void Update()
     {
         _timer += Time.deltaTime;
-        //Debug.Log(_state.ToString());
         _state.UpdateState(this);
         
     }
@@ -166,12 +152,11 @@ public class FishStateManager : MonoBehaviour
 
     public void CalculateNewTargetPos()
     {
-        var newX = Random.Range(_middleOfPool.x - 1.4f, _middleOfPool.x + 2.5f);
-        var newZ = Random.Range(_middleOfPool.z - 3.0f, _middleOfPool.z +1.6f);
-        var newY = Random.Range(_middleOfPool.y - 2.5f, _middleOfPool.y + 0.2f);
+        var newX = Random.Range(_middleOfPool.x - 1.5f, _middleOfPool.x + 1.25f);
+        var newZ = Random.Range(_middleOfPool.z - 1.5f, _middleOfPool.z +0.8f);
+        var newY = Random.Range(_middleOfPool.y - 1.25f, _middleOfPool.y + 0.1f);
         _curSpeed = Random.Range(_minSpeed, _maxSpeed);
         _targetPos = new Vector3(newX, newY, newZ);
-        Debug.Log("Getting new pos : " + newX + " , " + newZ + " , " + newY);
         HookStateManager.ResetI();
 
     }
@@ -190,10 +175,9 @@ public class FishStateManager : MonoBehaviour
     
     public Bait GetActiveBait() { return _activeBait; }
 
-    public void ConsumeActiveBait() { _inventoryManager.baits[_activeBait.id] -= 1; }
+    public void ConsumeActiveBait() { if (_inventoryManager.baits[_activeBait.id] != 0) { _inventoryManager.baits[_activeBait.id] -= 1; } }
     public void GetNewTargetPosOnCondition()
     {
-        Debug.Log(_targetPos);
         if (Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(_targetPos.x, 0, _targetPos.z)) < 0.5f) 
         { 
             CalculateNewTargetPos();
@@ -220,12 +204,14 @@ public class FishStateManager : MonoBehaviour
         GameObject.Find("InventoryManager").GetComponent<InventoryManager>().addItem(fishItem);
         Destroy(GameObject.FindGameObjectWithTag("DuringCatchSequence"));
         _catchFishInitializer.MakeAvaliable();
+        ConsumeActiveBait();
     }
 
     public void SelfDestruct()
     {
-        Destroy(PrefabParent);
+        ConsumeActiveBait();
         _catchFishInitializer.MakeAvaliable();
+        Destroy(PrefabParent);
     }
 
     public void InflatePufferfish() { _pufferfishScript.Inflate(); }
